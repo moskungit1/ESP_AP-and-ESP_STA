@@ -3,7 +3,7 @@
 const char* ssid = "ESP32_PBUA";
 const char* password = "11501150";
 
-const char* AP_IP = "192.168.4.1";  // IP ของ AP
+const char* AP_IP = "192.168.4.1";
 const int PORT = 80;
 
 WiFiClient client;
@@ -12,7 +12,7 @@ WiFiClient client;
 #define IN4 32
 #define ENB 25
 
-const int speed = 255;  // ความเร็ว (255 = 100% ความเร็วสูงสุด)
+const int speed = 255;
 
 void setup() {
   Serial.begin(115200);
@@ -31,7 +31,7 @@ void setup() {
   Serial.print("STA IP Address: ");
   Serial.println(WiFi.localIP());
 
-  // Connect to the AP Server
+
   if (client.connect(AP_IP, PORT)) {
     Serial.println("Connected to AP Server!");
   } else {
@@ -40,7 +40,7 @@ void setup() {
 }
 
 void loop() {
-  // Reconnect to AP if disconnected
+
   if (!client.connected()) {
     Serial.println("Reconnecting to AP...");
     if (client.connect(AP_IP, PORT)) {
@@ -56,7 +56,7 @@ void loop() {
     Serial.print("Data from AP: ");
     Serial.println(data);
 
-    // Execute motor commands based on received data
+
     if (data == "w") {
       moveForward();
     } else if (data == "s") {
@@ -72,7 +72,7 @@ void loop() {
 void moveForward() {
   digitalWrite(IN3, HIGH);
   digitalWrite(IN4, LOW);
-  analogWrite(ENB, speed);  // ใช้ analogWrite แทน ledcWrite
+  analogWrite(ENB, speed);
   delay(1000);
   stop();
 }
@@ -80,7 +80,7 @@ void moveForward() {
 void moveBackward() {
   digitalWrite(IN3, LOW);
   digitalWrite(IN4, HIGH);
-  analogWrite(ENB, speed);  // ใช้ analogWrite แทน ledcWrite
+  analogWrite(ENB, speed);
   delay(1000);
   stop();
 }
@@ -88,7 +88,7 @@ void moveBackward() {
 void turnLeft() {
   digitalWrite(IN3, HIGH);
   digitalWrite(IN4, LOW);
-  analogWrite(ENB, speed);  // ใช้ analogWrite แทน ledcWrite
+  analogWrite(ENB, speed);
   delay(1000);
   stop();
 }
@@ -96,7 +96,7 @@ void turnLeft() {
 void turnRight() {
   digitalWrite(IN3, LOW);
   digitalWrite(IN4, HIGH);
-  analogWrite(ENB, speed);  // ใช้ analogWrite แทน ledcWrite
+  analogWrite(ENB, speed);
   delay(1000);
   stop();
 }
@@ -104,5 +104,5 @@ void turnRight() {
 void stop() {
   digitalWrite(IN3, LOW);
   digitalWrite(IN4, LOW);
-  analogWrite(ENB, 0);  // ปิด PWM
+  analogWrite(ENB, 0); 
 }
