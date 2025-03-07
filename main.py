@@ -1,39 +1,21 @@
 import socket
-import threading
+import time
 
-def send_command(ip, port, command):
-    try:
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.connect((ip, port))
-        sock.sendall(command.encode())
-        response = sock.recv(1024)
-        print(f"Response from {ip}: {response.decode()}")
-        sock.close()
-    except Exception as e:
-        print(f"Error with {ip}: {e}")
+ESP32_IP = "192.168.4.1"
+PORT = 80
 
-
-esp1_ip = "192.168.4.1"  
-esp1_port = 80
-
-esp2_ip = "192.168.4.2"  
-esp2_port = 81
+client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+client_socket.connect((ESP32_IP, PORT))
+print("Connected to ESP32")
 
 while True:
-    command = input("Enter command (W: forward, S: backward, X: stop, Q: quit): ").strip().upper()
+    data_to_send = input("Enter data to send: ")
 
-    if command == "Q":
-        print("Exiting program...")
+    if data_to_send.lower() == 'exit':
         break
 
-    if command in ["W", "S", "X", "A", "D"]:
-        thread1 = threading.Thread(target=send_command, args=(esp1_ip, esp1_port, command))
-        thread2 = threading.Thread(target=send_command, args=(esp2_ip, esp2_port, command))
+    client_socket.send((data_to_send + '\r').encode())
+    time.sleep(1)
 
-        thread1.start()
-        thread2.start()
-
-        thread1.join()
-        thread2.join()
-    else:
-        print("Invalid command. Please enter W, S, X, A, D, or Q.")
+client_socket.close()
+print("Connection closed")
